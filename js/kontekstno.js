@@ -5,8 +5,21 @@ async function create_room() {
     return room_id;
 }
 
-async function kontekstno_query(method = '') {
-    const url = "https://xn--80aqu.xn--e1ajbkccewgd.xn--p1ai/" + method;
+async function kontekstno_query(method = '', word = '', challenge_id = '') {
+
+    let url = '';
+    // console.log(method);
+
+    if (method == 'random-challenge') {
+        url = "https://xn--80aqu.xn--e1ajbkccewgd.xn--p1ai/" + method;
+    }
+
+    if (method == 'score') {
+        url = "https://апи.контекстно.рф/score?challenge_id=" + challenge_id + "&word=" + word + "&challenge_type=random";
+    }
+
+
+
     const response = await fetch(url);
 
     if (!response.ok) {

@@ -1,5 +1,7 @@
 
 let channel_name = 'fra3a';
+let secret_word_id = '';
+
 
 // // check channel_name inside localstorage
 // channel_name = localStorage.getItem('channel_name');
@@ -10,21 +12,6 @@ let channel_name = 'fra3a';
 
 // localStorage.setItem('channel_name', channel_name);
 
-
-function renderChallenge(data) {
-    const bestMatchDiv = document.querySelector('.best-match');
-    const lastWordsDiv = document.querySelector('.last-words');
-
-    console.log(data);
-
-    // Проверяем структуру и рисуем 
-    if (data && data.id) {
-        // output challenge data
-        bestMatchDiv.innerHTML = JSON.stringify(data);
-    } else {
-        bestMatchDiv.innerText = "Пришли странные данные";
-    }
-}
 
 // menu click handlers
 // function initMenu() {
@@ -42,8 +29,8 @@ async function app() {
     try {
 
         if (channel_name) {
-            const room_id = await create_room();
-            console.log('ID комнаты: ', room_id);
+            secret_word_id = await create_room();
+            console.log('ID секрутного слова: ', secret_word_id);
             create_chat_connection(channel_name);
         }
 
@@ -55,8 +42,6 @@ async function app() {
     }
 }
 
-function process_message() {
 
-}
 
 app();
