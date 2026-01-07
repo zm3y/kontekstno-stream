@@ -4,7 +4,7 @@
 function create_chat_connection(channel_name = '') {
 
     const client = new tmi.Client({
-        channels: [channel_name] // Впиши сюда нужный канал
+        channels: [channel_name]
     });
 
     // Подключаемся
