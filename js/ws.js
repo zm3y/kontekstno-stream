@@ -147,10 +147,14 @@ function handle_win(winner_name) {
 
 document.getElementById('test-win-btn').addEventListener('click', () => {
     const randomSuffix = Math.floor(Math.random() * 10000);
-    process_message('TestUser', '#0000FF', 'WinWord' + randomSuffix, true);
+    process_message('TestUser', '#FFFFFF', 'WinWord' + randomSuffix, true);
 });
 
 document.getElementById('menu-button-settings').addEventListener('click', () => {
     const settingsSection = document.getElementById('settings');
     settingsSection.style.display = settingsSection.style.display === 'none' ? 'block' : 'none';
+});
+document.getElementById('menu-button-info').addEventListener('click', () => {
+    const infoSection = document.getElementById('info');
+    infoSection.style.display = infoSection.style.display === 'none' ? 'block' : 'none';
 });
