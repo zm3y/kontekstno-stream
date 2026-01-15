@@ -1,6 +1,7 @@
 
 
 let secret_word_id = '';
+let words_count = 0;
 
 async function generate_secret_word() {
     const data = await kontekstno_query('random-challenge');
@@ -55,6 +56,11 @@ function create_chat_connection(channel_name = '') {
 
         // prevent xss attack from message
         message = message.replace(/[^a-zA-Zа-яА-ЯёЁ0-9]/g, '');
+
+        words_count++;
+        if (words_count === 1) {
+            document.getElementById('info').style.display = 'none';
+        }
 
         process_message(name, color, message);
 

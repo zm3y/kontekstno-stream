@@ -11,6 +11,7 @@ body {
     font-weight: 400;
     font-style: normal;
     font-variation-settings: "GRAD" 0;
+    line-height: 1.4;
 }
 
 .page-width {
@@ -70,6 +71,7 @@ section {
 .guessing {
     display: flex;
     gap: 20px;
+    align-items: flex-start;
     /* max-height: 2000px; */
 }
 
@@ -93,7 +95,7 @@ section {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 15px 13px;
+    padding: 13px 15px 10px;
 }
 
 .guessing .word {
