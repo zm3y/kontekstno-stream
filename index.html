@@ -20,17 +20,16 @@
             <div class="logo">🧠 СЛОВОТРОН 9000</div>
             <nav>
                 <ul>
-                    <li class="leaderboard">
-                        <span id="menu-button-leaderboard" title="Лидерборд">🏆</span>
+                    <li id="menu-button-leaderboard" class="leaderboard">
+                        <span title="Лидерборд">🏆</span>
                     </li>
-                    <li class="settings">
-                        <span id="menu-button-settings" title="Настройки">⚙️</span>
+                    <li id="menu-button-settings" class="settings">
+                        <span title="Настройки">⚙️</span>
                     </li>
                 </ul>
             </nav>
         </header>
-        <div id="chat-container"></div>
-        <div class="settings" style="display: none;">
+        <section id="settings" class="content-box" style="display: none;">
             <div class="setting"> Адрес Twitch-канала <input type="text" id="channel-name" placeholder="fra3a">
             </div>
             <div class="setting"> Перезапуск игры после победы (секунды) <input type="text" id="restart-time"
@@ -39,17 +38,17 @@
             <div class="setting"> Поле для добавления слова <input type="checkbox" id="allow-add-word-checkbox"
                     name="allow-add-word">
             </div>
-        </div>
-        <div class="leaderboard" style="display: none;"> Лидерборд: </div>
-        <div class="winner" style="display: none;"> Победитель: </div>
-        <div class="restart-timer" style="display: none;">
+        </section>
+        <section class="leaderboard" style="display: none;"> Лидерборд: </section>
+        <section class="winner" style="display: none;"> Победитель: </section>
+        <section class="restart-timer" style="display: none;">
             <span>Перезапуск через: </span>
             <span id="restart-timer-value">0</span>
-        </div>
-        <div class="guessing">
+        </section>
+        <section class="guessing">
             <div class="last-words"></div>
             <div class="best-match"></div>
-        </div>
+        </section>
         <div style="margin-top: 20px;">
             <button id="test-win-btn">Тест победы</button>
         </div>
