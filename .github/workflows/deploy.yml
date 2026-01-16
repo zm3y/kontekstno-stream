@@ -1,4 +1,4 @@
-name: Deploy via SCP
+name: Deploy via SFTP
 
 on:
   push:
@@ -11,15 +11,21 @@ jobs:
     steps:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
-
-      - name: 🚀 Deploy to Server
-        uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.SFTP_HOST }}
+          fetch-depth: 0
+
+      - name: 🧹 Remove unwanted files
+        # Удаляем всё лишнее перед отправкой
+        # В этом списке перечисли всё, что НЕ хочешь видеть на сервере
+        run: rm -rf .git .github .vscode .DS_Store node_modules README.md .env test
+
+      - name: 📂 SFTP Deploy
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
           username: ${{ secrets.SFTP_USER }}
-          password: ${{ secrets.SFTP_PASSWORD }}
+          server: ${{ secrets.SFTP_HOST }}
           port: 2222
-          source: "."
-          target: "/"
-          # Что игнорировать (через запятую)
-          exclude: ".git,.github,.vscode,.DS_Store,node_modules,readme.md,test"
+          ssh_password: ${{ secrets.SFTP_PASSWORD }}
+          local_path: './'
+          remote_path: '/slovotron.fra3a.ru/'
+          sftp_only: true
