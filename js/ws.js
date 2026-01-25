@@ -1,6 +1,8 @@
 let channel_name = '';
 let restart_time = 20;
 let is_game_finished = false;
+let roundStartTime, uniqWords, repeatWords;
+let uniqUsers = new Set();
 const checked_words = new Set();
 const last_words_container = document.querySelector('.guessing .last-words');
 
@@ -39,6 +41,10 @@ async function process_message(user, nickname_color, word, force_win = false) {
 
     if (is_game_finished) return;
 
+    if (!uniqUsers.has(user.username)) {
+        uniqUsers.add(user.username);
+    }
+
     // перевод слова в нижний регистр
     word = word.toLowerCase();
     // сделать первую букву большой
@@ -46,6 +52,7 @@ async function process_message(user, nickname_color, word, force_win = false) {
 
     // Проверяем, есть ли слово в списке
     if (checked_words.has(word)) {
+        repeatWords++
         console.log(`Слово "${word}" уже было проверено.`);
         // добавить слово в колонку .guessing .last-words в верх списка
         const html = `
@@ -98,6 +105,7 @@ async function process_message(user, nickname_color, word, force_win = false) {
     const new_message = message_template(word, word_check.distance, user['display-name'], nickname_color);
 
     console.log(word_check);
+    uniqWords++
 
     // добавить слово в колонку .guessing .last-words в верх списка
     last_words_container.insertAdjacentHTML('afterbegin', new_message);
@@ -162,7 +170,7 @@ function handle_win(winner_user) {
 
     if (typeof updateLeaderboard === 'function') {
         updateLeaderboard(winner_user['display-name']);
-        const leaderboardSection = document.getElementById('leaderboard');
+        const leaderboardSection = document.getElementById('leaderboard-statistic');
         if (leaderboardSection) leaderboardSection.style.display = 'flex';
     }
 
@@ -193,7 +201,7 @@ function handle_win(winner_user) {
         reset_round();
         winnerBlock.style.display = 'none';
 
-        const leaderboardSection = document.getElementById('leaderboard');
+        const leaderboardSection = document.getElementById('leaderboard-statistic');
         if (leaderboardSection) leaderboardSection.style.display = 'none';
 
         is_game_finished = false;
@@ -204,6 +212,9 @@ function reset_round() {
     document.querySelector('.guessing .last-words').innerHTML = '';
     document.querySelector('.guessing .best-match').innerHTML = '';
     checked_words.clear();
+    roundStartTime = Date.now();
+    uniqUsers.clear();
+    uniqWords = repeatWords = 0;
 }
 
 document.getElementById('test-win-btn').addEventListener('click', () => {
