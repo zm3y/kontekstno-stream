@@ -1,7 +1,7 @@
 let channel_name = '';
 let restart_time = 20;
 let is_game_finished = false;
-let roundStartTime, uniqWords, repeatWords;
+let roundStartTime, uniqWords, repeatWords, winTime;
 let uniqUsers = new Set();
 const checked_words = new Set();
 const last_words_container = document.querySelector('.guessing .last-words');
@@ -167,6 +167,7 @@ function message_template(word, distance, name, nickname_color) {
 
 function handle_win(winner_user) {
     is_game_finished = true;
+    winTime = Date.now();
 
     if (typeof updateLeaderboard === 'function') {
         updateLeaderboard(winner_user['display-name']);
