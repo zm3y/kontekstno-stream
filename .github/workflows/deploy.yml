@@ -23,5 +23,11 @@ jobs:
           port: 2222                               # порт (обычно 21); можно менять
           protocol: ftps                          # "ftp" или "ftps"
           # local-dir: ./public                    # папка в репозитории, которую качать (поменяйте под вашу сборку)
-          server-dir: /slovotron.fra3a.ru               # путь на сервере (поменяйте под хостинг)
+          server-dir: /slovotron.fra3a.ru/               # путь на сервере (поменяйте под хостинг)
+          dry-run: true
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            readme.md
           # другие опции (see action README) можно добавить здесь
