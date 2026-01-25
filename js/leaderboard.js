@@ -22,6 +22,7 @@ function updateLeaderboard(winnerName) {
 }
 
 function renderLeaderboard() {
+    renderStatistic();
     const data = getLeaderboardData();
     const listContainer = document.querySelector('#leaderboard .list');
     if (!listContainer) return;
@@ -75,7 +76,7 @@ function resetLeaderboard() {
 const leaderboardBtn = document.getElementById('menu-button-leaderboard');
 if (leaderboardBtn) {
     leaderboardBtn.addEventListener('click', () => {
-        const leaderboardSection = document.getElementById('leaderboard');
+        const leaderboardSection = document.getElementById('leaderboard-statistic');
         // Toggle display
         const isVisible = leaderboardSection.style.display !== 'none';
         leaderboardSection.style.display = isVisible ? 'none' : 'flex';
@@ -89,4 +90,19 @@ if (leaderboardBtn) {
 const resetLeaderboardBtn = document.getElementById('reset-leaderboard-btn');
 if (resetLeaderboardBtn) {
     resetLeaderboardBtn.addEventListener('click', resetLeaderboard);
+}
+
+function pad ( val ) { return val > 9 ? val : "0" + val; }
+
+function renderStatistic() {
+    if (!is_game_finished) {winTime = Date.now()}
+    let roundTime = Math.floor((winTime - roundStartTime) / 1000);
+    if (!roundTime) { roundTime = 0}
+    const roundTimeSec = pad(roundTime%60);
+    const roundTimeMin = pad(parseInt(roundTime/60,10));
+    const roundTimeQt = roundTimeMin + ':' + roundTimeSec;
+    document.getElementById('uniq-users').innerText = (typeof uniqUsers.size !== 'undefined' ? uniqUsers.size : 0);
+    document.getElementById('uniq-words').innerText = (typeof uniqWords !== 'undefined' ? uniqWords : 0);
+    document.getElementById('repeated-words').innerText = (typeof repeatWords !== 'undefined' ? repeatWords : 0);
+    document.getElementById('round-time').innerText = (typeof roundTimeQt !== 'undefined' ? roundTimeQt : 0);
 }

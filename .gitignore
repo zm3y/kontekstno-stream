@@ -1,2 +1,4 @@
 test/
 # config.js
+.DS_Store
+._*
