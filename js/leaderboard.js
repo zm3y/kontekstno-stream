@@ -95,7 +95,8 @@ if (resetLeaderboardBtn) {
 function pad ( val ) { return val > 9 ? val : "0" + val; }
 
 function renderStatistic() {
-    let roundTime = Math.floor((Date.now() - roundStartTime) / 1000);
+    if (!is_game_finished) {winTime = Date.now()}
+    let roundTime = Math.floor((winTime - roundStartTime) / 1000);
     if (!roundTime) { roundTime = 0}
     const roundTimeSec = pad(roundTime%60);
     const roundTimeMin = pad(parseInt(roundTime/60,10));
