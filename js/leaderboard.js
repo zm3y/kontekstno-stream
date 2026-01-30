@@ -19,12 +19,12 @@ function updateLeaderboard(winnerName) {
     }
     saveLeaderboardData(data);
     renderLeaderboard();
+    renderStatistic();
 }
 
 function renderLeaderboard() {
-    renderStatistic();
     const data = getLeaderboardData();
-    const listContainer = document.querySelector('#leaderboard .list');
+    listContainer = document.querySelector('#leaderboard .list');
     if (!listContainer) return;
 
     listContainer.innerHTML = '';
@@ -82,9 +82,11 @@ if (leaderboardBtn) {
         leaderboardSection.style.display = isVisible ? 'none' : 'flex';
 
         if (!isVisible) {
-            lbStatRender = setInterval(function() {
-                if (is_game_finished) {clearInterval(lbStatRender)}
-                renderLeaderboard();
+            renderLeaderboard();
+            renderStatistic();
+            lbStatRender = setInterval(function () {
+                if (is_game_finished) { clearInterval(lbStatRender) }
+                renderStatistic();
             }, 1000)
         } else {
             clearInterval(lbStatRender);
@@ -97,17 +99,17 @@ if (resetLeaderboardBtn) {
     resetLeaderboardBtn.addEventListener('click', resetLeaderboard);
 }
 
-function pad ( val ) { return val > 9 ? val : "0" + val; }
+function pad(val) { return val > 9 ? val : "0" + val; }
 
 function renderStatistic() {
-    if (!is_game_finished) {winTime = Date.now()}
+    if (!is_game_finished) { winTime = Date.now() }
     let roundTime = Math.floor((winTime - roundStartTime) / 1000);
-    if (!roundTime) { roundTime = 0}
-    const roundTimeSec = pad(roundTime%60);
-    const roundTimeMin = pad(parseInt(roundTime/60,10));
+    if (!roundTime) { roundTime = 0 }
+    const roundTimeSec = pad(roundTime % 60);
+    const roundTimeMin = pad(parseInt(roundTime / 60, 10));
     const roundTimeQt = roundTimeMin + ':' + roundTimeSec;
-    document.getElementById('uniq-users').innerText = (typeof uniqUsers.size !== 'undefined' ? uniqUsers.size : 0);
-    document.getElementById('uniq-words').innerText = (typeof uniqWords !== 'undefined' ? uniqWords : 0);
-    document.getElementById('repeated-words').innerText = (typeof repeatWords !== 'undefined' ? repeatWords : 0);
-    document.getElementById('round-time').innerText = (typeof roundTimeQt !== 'undefined' ? roundTimeQt : 0);
+    document.getElementById('uniq-users').innerText = uniqUsers?.size ?? 0;
+    document.getElementById('uniq-words').innerText = uniqWords ?? 0;
+    document.getElementById('repeated-words').innerText = repeatWords ?? 0;
+    document.getElementById('round-time').innerText = roundTimeQt ?? '00:00';
 }
