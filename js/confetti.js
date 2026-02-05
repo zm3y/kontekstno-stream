@@ -4,7 +4,7 @@ function randomInRange(min, max) {
 }
 
 const confetti_win = (endtime) => {
-  const interval = setInterval(function() {
+  const interval = setInterval(function () {
     const defaults = { count: 3, spread: 45 };
     const timeLeft = endtime - Date.now();
     if (timeLeft <= 0 || resetTimerPaused) {
@@ -13,13 +13,13 @@ const confetti_win = (endtime) => {
     confetti(
       Object.assign({}, defaults, {
         angle: 60,
-        position: { x: 20 },
+        position: { x: 10 },
       })
     );
     confetti(
       Object.assign({}, defaults, {
         angle: 120,
-        position: { x: 80 },
+        position: { x: 90 },
       })
     );
   }, 25);
@@ -34,7 +34,7 @@ const confetti_fireworks = (endtime) => {
     zIndex: 0,
   };
 
-  const interval = setInterval(function() {
+  const interval = setInterval(function () {
     const timeLeft = endtime - Date.now();
 
     if (timeLeft <= 0 || resetTimerPaused) {
