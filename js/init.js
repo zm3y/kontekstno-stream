@@ -238,7 +238,7 @@ channelInput.addEventListener("input", () => {
         }
     }
 
-    if (channelName.length >= 4) {
+    if (channelName.length >= 3) {
         validationTimeout = setTimeout(() => validateTwitchAcc(channelName), 1000);
     } else {
         channelInput.setCustomValidity("Имя канала должно быть не менее 4 символов.");
