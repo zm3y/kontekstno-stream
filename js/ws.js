@@ -286,19 +286,15 @@ document.getElementById('menu-button-info').addEventListener('click', () => {
 document.getElementById('menu-button-restart').addEventListener('click', () => {
     resetRoundTimeout(0);
     document.getElementById('menu-button-restart').style.display = 'none';
+    resetTimerPaused = false;
 });
 
 document.getElementById('menu-timer').addEventListener('click', () => {
     const menuTimer = document.getElementById('menu-timer');
-    if (is_game_finished && !resetTimerPaused) {
-        menuTimer.style.color = '#777';
-        clearTimeout(resetRoundTimeoutId);
-        clearInterval(menuTimerId);
-        resetTimerPaused = true;
-    } else if (is_game_finished && resetTimerPaused) {
-        menuTimer.style.display = 'none';
-        menuTimer.style.color = '#FFF';
-        resetRoundTimeout(0);
-        resetTimerPaused = false;
-    }
+    const menuRestartButton = document.getElementById('menu-button-restart');
+    menuTimer.style.display = 'none';
+    menuRestartButton.style.display = 'block';
+    clearTimeout(resetRoundTimeoutId);
+    clearInterval(menuTimerId);
+    resetTimerPaused = true;
 });
