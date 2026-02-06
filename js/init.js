@@ -4,6 +4,7 @@ let secret_word_id = '';
 let words_count = 0;
 let tmi_client = null;
 let wordQueue = [];
+let lastInputTime, twitchAccValidation;
 
 async function generate_secret_word() {
     const data = await kontekstno_query({ method: 'random-challenge' });
@@ -133,15 +134,7 @@ if (saveBtn) {
         const restartInput = document.getElementById('restart-time');
 
         if (channelInput && channelInput.value) {
-            let channelName = channelInput.value.trim();
-            if (channelName.includes('twitch.tv/')) {
-                const parts = channelName.split('twitch.tv/');
-                if (parts.length > 1) {
-                    channelName = parts[1].split('/')[0].split('?')[0];
-                    channelInput.value = channelName;
-                }
-            }
-            localStorage.setItem('channel_name', channelName);
+            localStorage.setItem('channel_name', channelInput.value.trim());
         }
 
         if (restartInput && restartInput.value) {
@@ -198,6 +191,63 @@ async function app() {
     } catch (error) {
         console.error(error);
     }
+}
+
+const channelInput = document.getElementById("channel-name");
+const restartInput = document.getElementById("restart-time");
+
+channelInput.addEventListener("input", (event) => {
+    document.getElementById('setting-avatar').style.display = 'none'
+    channelInput.setCustomValidity("Логин либо ссылка на канал");
+    channelInput.reportValidity();
+    saveBtn.disabled = true;
+    lastInputTime = Date.now();
+    if (typeof twitchAccValidation !== 'undefined') {
+        clearInterval(twitchAccValidation);
+    }
+
+    let channelName = channelInput.value.trim();
+    if (channelName.includes('twitch.tv/')) {
+        const parts = channelName.split('twitch.tv/');
+        if (parts.length > 1) {
+            channelName = parts[1].split('/')[0].split('?')[0];
+            channelInput.value = channelName;
+            validateTwitchAcc(channelName)
+        }
+    } else if (channelInput.value.length >= 4) {
+        validateTwitchAcc(channelInput.value)
+    }
+});
+
+restartInput.addEventListener("input", (event) => {
+    restartInput.reportValidity();
+    if (!restartInput.validity.valid) {
+        saveBtn.disabled = true;
+    } else if (channelInput.validity.valid) {
+        saveBtn.disabled = false;
+    }
+});
+
+function validateTwitchAcc(acc) {
+    twitchAccValidation = setInterval(function() {
+        if ((Date.now() - lastInputTime) > 1000) {
+            clearInterval(twitchAccValidation);
+            channelInput.setCustomValidity("Проверяю...");
+            getTwitchUserData(acc).then((user) => {
+                if (user) {
+                    document.getElementById('setting-avatar').src = user.logo
+                    document.getElementById('setting-avatar').style.display = 'flex'
+                    channelInput.setCustomValidity("");
+                    if (restartInput.validity.valid) {
+                        saveBtn.disabled = false;
+                    }
+                } else {
+                    channelInput.setCustomValidity("Канал не найден, попробуйте еще раз");
+                }
+                channelInput.reportValidity();
+            });
+        }
+    }, 500);
 }
 
 app();
