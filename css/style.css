@@ -134,6 +134,17 @@ section {
     margin-bottom: 0;
 }
 
+#settings .setting input[type="checkbox"] {
+    accent-color: #055c05;
+    width: 2em;
+    height: 2em;
+}
+
+#settings .checkbox-container {
+    display: flex;
+    align-items: center;
+}
+
 #settings button {
     margin-top: 2px;
 }
@@ -302,10 +313,15 @@ section {
     gap: 20px;
 }
 
-#winner img {
+#winner-avatar {
     max-width: 80px;
     border-radius: 300px;
     overflow: hidden;
+}
+
+#winner-avatar:hover {
+    filter: none !important;
+    transition: all 0.5s;
 }
 
 #winner .winner-name {
@@ -413,6 +429,7 @@ footer.main .github-link img {
 button,
 input[type="button"],
 input[type="submit"] {
+    width: 100%;
     cursor: pointer;
     user-select: none;
     padding: 15px 20px;

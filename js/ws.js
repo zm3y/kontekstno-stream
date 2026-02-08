@@ -202,6 +202,7 @@ function handle_win(winner_user) {
     getTwitchUserData(winner_user.username).then((user) => {
         console.log(user);
         document.getElementById('winner-avatar').src = user.logo;
+        document.getElementById('winner-avatar').style = win_avatar_enable ? '' : 'filter: blur(10px);';
     });
 
     const winnerBlock = document.getElementById('winner');
