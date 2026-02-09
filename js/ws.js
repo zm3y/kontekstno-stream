@@ -6,6 +6,8 @@ let uniqUsers = new Set();
 const checked_words = new Map();
 const last_words_container = document.querySelector('.guessing .last-words');
 const MAX_LAST_WORDS = 20;
+const kontekstno_api_tips_max_distance = 300; // апи подсказок не реагирует на число больше 300
+
 
 function addAnythingToLastWords(html) {
     last_words_container.insertAdjacentHTML('afterbegin', html);
@@ -192,6 +194,8 @@ function handle_win(winner_user) {
     is_game_finished = true;
     winTime = Date.now();
 
+    tip_menu_button.style.display = 'none';
+
     if (typeof updateLeaderboard === 'function') {
         updateLeaderboard(winner_user['display-name']);
         const leaderboardSection = document.getElementById('leaderboard-statistic');
@@ -263,12 +267,13 @@ async function resetRoundTimeout(time) {
 function reset_round() {
     document.querySelector('.guessing .last-words').innerHTML = '';
     document.querySelector('.guessing .best-match').innerHTML = '';
+    tip_menu_button.style.display = 'block';
     checked_words.clear();
     roundStartTime = Date.now();
     uniqUsers.clear();
     uniqWords = repeatWords = 0;
     reset_tips();
-    best_found_distance = 99999;
+    best_found_distance = kontekstno_api_tips_max_distance;
 }
 
 document.getElementById('test-win-btn').addEventListener('click', () => {

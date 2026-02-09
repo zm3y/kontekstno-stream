@@ -76,7 +76,7 @@ function create_chat_connection(channel_name = '') {
 
         // проверка на подсказку, дальше не идем
         if (message.toLowerCase().startsWith('!подсказка')) {
-            use_tip(message, user['username']);
+            use_tip(user['username']);
             return;
         }
 
