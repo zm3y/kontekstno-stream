@@ -202,8 +202,8 @@ function handle_win(winner_user) {
     winnerAvatar.src = '';
     getTwitchUserData(winner_user.username).then((user) => {
         console.log(user);
-        winnerAvatar.src = user.logo;
         winnerAvatar.classList.toggle('blurred', !win_avatar_enable);
+        winnerAvatar.src = user.logo;
     });
 
     const winnerBlock = document.getElementById('winner');
