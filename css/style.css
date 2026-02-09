@@ -462,6 +462,13 @@ footer.main .github-link img {
     width: 80px;
 }
 
+footer.tech-things {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+}
+
 .button,
 button,
 input[type="button"],

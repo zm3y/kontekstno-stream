@@ -13,9 +13,9 @@ function saveLeaderboardData(data) {
 function updateLeaderboard(winnerName) {
     let data = getLeaderboardData();
     if (data[winnerName]) {
-        data = Object.assign({[winnerName]: data[winnerName]++}, data);
+        data = Object.assign({ [winnerName]: data[winnerName]++ }, data);
     } else {
-        data = Object.assign({[winnerName]: 1}, data);
+        data = Object.assign({ [winnerName]: 1 }, data);
     }
     saveLeaderboardData(data);
     renderLeaderboard();
@@ -113,3 +113,14 @@ function renderStatistic() {
     document.getElementById('repeated-words').innerText = repeatWords ?? 0;
     document.getElementById('round-time').innerText = roundTimeQt ?? '00:00';
 }
+
+// function to remove testuser from leaderboard
+function removeTestUserFromLeaderboard() {
+    const leaderboard = getLeaderboardData();
+    if (leaderboard['TestUser']) {
+        delete leaderboard['TestUser'];
+        saveLeaderboardData(leaderboard);
+    }
+}
+
+document.getElementById('remove-test-user-from-leaderboard').addEventListener('click', removeTestUserFromLeaderboard);
