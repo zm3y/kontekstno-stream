@@ -61,11 +61,11 @@ async function use_tip(user = '', force = false) {
     reset_tips();
 
     checked_words.set(tip_word.word, { distance: tip_word.distance });
-    const new_message = message_template(tip_word.word, tip_word.distance, '🫵😄 Подсказка', '#DDD');
+    const new_message = message_template(tip_word.word, tip_word.distance, '💡 Подсказка', '#DDD');
     addAnythingToLastWords(new_message);
     addMatchWord(new_message, tip_word.distance);
     if (tip_word.distance == 1) {
-        handle_win({ username: 'podskazka', 'display-name': '🫵😄 Подсказка' });
+        handle_win({ username: 'podskazka', 'display-name': '💡 Подсказка' });
     }
 
     // await process_message(wordQueue[0].user, '#DDD', tip_word)
