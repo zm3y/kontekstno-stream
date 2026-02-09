@@ -66,6 +66,14 @@ nav li:hover span {
     transform: rotate(10deg);
 }
 
+#menu-button-tip {
+    display: none;
+    opacity: 0.25;
+}
+
+#menu-button-tip:hover {
+    opacity: 1;
+}
 
 section {
     display: flex;

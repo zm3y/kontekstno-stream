@@ -192,6 +192,8 @@ function handle_win(winner_user) {
     is_game_finished = true;
     winTime = Date.now();
 
+    tip_menu_button.style.display = 'none';
+
     if (typeof updateLeaderboard === 'function') {
         updateLeaderboard(winner_user['display-name']);
         const leaderboardSection = document.getElementById('leaderboard-statistic');
@@ -263,6 +265,7 @@ async function resetRoundTimeout(time) {
 function reset_round() {
     document.querySelector('.guessing .last-words').innerHTML = '';
     document.querySelector('.guessing .best-match').innerHTML = '';
+    tip_menu_button.style.display = 'block';
     checked_words.clear();
     roundStartTime = Date.now();
     uniqUsers.clear();

@@ -1,10 +1,10 @@
-// 
-let best_found_distance = 99999; // апи не реагирует на число больше 300, но на всякий случай
+const kontekstno_api_max_distance = 300; // апи не реагирует на число больше 300
+let best_found_distance = kontekstno_api_max_distance;
 let tip_requests_users = new Set();
 let tip_last_reset_time = Date.now();
 let tip_cooldown_time = 1000 * 60 * 1;
 let tip_distance_tune_multiplier = 1.5; // механика подсказок такова что апишка контекстно дает слово вдвое ближе чем last_word_rank. мультипликатор нужен чтобы это поправить как нам надо. например: лучшая дистанция 100, мультипликатор 1.5, подсказка даст дальность 75 вместо 50.
-
+const tip_menu_button = document.getElementById('menu-button-tip');
 
 // let tip_requests_count = 0;
 
@@ -16,13 +16,13 @@ let tip_distance_tune_multiplier = 1.5; // механика подсказок �
 
 // TODO: сделать так чтобы подсказку в рамках запроса одной подсказки до ее сброса, пользователь мог запросить лишь один раз
 
-async function use_tip(word = '', user = '') {
-    console.log('enter "use_tip', word, user);
-    if (tip_requests_users.has(user)) return;
-    // if (best_found_distance == 2) return;
+async function use_tip(user = '', force = false) {
+    // console.log('enter "use_tip"', user);
+    if (tip_requests_users.has(user) && !force) return;
+    if (!best_found_distance) best_found_distance = kontekstno_api_max_distance;
 
     let tip_time_left = tip_cooldown_time - (Date.now() - tip_last_reset_time);
-    if (tip_time_left > 0) {
+    if (tip_time_left > 0 && !force) {
         addTextToLastWords('Осталось секунд до использования подсказки: <b>' + Math.ceil(tip_time_left / 1000) + '</b>');
         // console.log('До использования подсказки осталось', tip_time_left / 1000, 'секунд');
         return;
@@ -30,37 +30,46 @@ async function use_tip(word = '', user = '') {
     tip_requests_users.add(user);
     let tip_requests_count = tip_requests_users.size;
     let tip_required = Math.floor(uniqUsers.size / 2); // сколько нужно людей для подсказки 
-    console.log('tip_requests:', tip_requests_count, 'tip_required:', tip_required);
-    if (tip_requests_count >= tip_required) {
-        // надо фейкануть дальность лучшего слова чтобы он не уполовинивал близость, а чуть подальше
-        let fine_tuned_distance = Math.ceil(best_found_distance * 1.5);
-        if (fine_tuned_distance > 300) fine_tuned_distance = 300; // иначе она всегда будет 300, это магическое число апишки, большую дальность она сбрасывает к 300
-        if (fine_tuned_distance == 3) fine_tuned_distance = 2; // edge case, апишка будет возвращать слово с дальностью 2 в ответ на 3 
-        if (best_found_distance > 300) fine_tuned_distance = best_found_distance;
+    // console.log('tip_requests:', tip_requests_count, 'tip_required:', tip_required);
 
-        // запрос подсказки
-        const tip_word = await kontekstno_query({
-            method: 'tip',
-            challenge_id: secret_word_id,
-            last_word_rank: fine_tuned_distance
-        });
-        console.log('tip_word:', tip_word);
-        best_found_distance = tip_word.distance; // обновляем текущую лучшую дальность
-        console.log('best_found_distance after tip:', best_found_distance);
-        reset_tips();
-
-        checked_words.set(tip_word.word, { distance: tip_word.distance });
-        const new_message = message_template(tip_word.word, tip_word.distance, '🫵😄 Подсказка', '#DDD');
-        addAnythingToLastWords(new_message);
-        addMatchWord(new_message, tip_word.distance);
-        if (tip_word.distance == 1) {
-            handle_win({ username: 'podskazka', 'display-name': '🫵😄 Подсказка' });
-        }
-
-        // await process_message(wordQueue[0].user, '#DDD', tip_word)
-    } else {
+    if (tip_requests_count < tip_required && !force) {
         addTextToLastWords('Нужно человек для использования подсказки: <b>' + (tip_required - tip_requests_count) + '</b>');
+        return;
     }
+
+    // надо фейкануть дальность лучшего слова чтобы он не уполовинивал близость, а чуть подальше. Например мальтипликатор 1.5 даст 25% приближения вместо 50%
+    let fine_tuned_distance = Math.floor(best_found_distance * 1.5);
+
+    // иначе она всегда будет kontekstno_api_max_distance, это магическое число апишки, большую дальность она сбрасывает к kontekstno_api_max_distance
+    if (fine_tuned_distance > kontekstno_api_max_distance) fine_tuned_distance = kontekstno_api_max_distance;
+
+    // edge case. Если логика апишки (Math.ceil(fine_tuned_distance / 2)) даст такое же значение, как и текущий best_found_distance, то не фейкаем его, чтобы всё не циклилось
+    if (Math.ceil(fine_tuned_distance / 2) == best_found_distance) fine_tuned_distance = best_found_distance;
+
+    // запрос подсказки
+    const tip_word = await kontekstno_query({
+        method: 'tip',
+        challenge_id: secret_word_id,
+        last_word_rank: fine_tuned_distance
+    });
+    if (!tip_word.distance) {
+        console.error('tip_word.distance is undefined', tip_word);
+        return;
+    }
+    console.log('tip_word:', tip_word);
+    best_found_distance = tip_word.distance; // обновляем текущую лучшую дальность
+    console.log('best_found_distance after tip:', best_found_distance);
+    reset_tips();
+
+    checked_words.set(tip_word.word, { distance: tip_word.distance });
+    const new_message = message_template(tip_word.word, tip_word.distance, '🫵😄 Подсказка', '#DDD');
+    addAnythingToLastWords(new_message);
+    addMatchWord(new_message, tip_word.distance);
+    if (tip_word.distance == 1) {
+        handle_win({ username: 'podskazka', 'display-name': '🫵😄 Подсказка' });
+    }
+
+    // await process_message(wordQueue[0].user, '#DDD', tip_word)
 
 }
 
@@ -68,3 +77,9 @@ function reset_tips() {
     tip_requests_users.clear(); // очищаем список пользователей которые использовали подсказку
     tip_last_reset_time = Date.now(); // обновляем время последнего использования подсказки
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    tip_menu_button.addEventListener('click', function () {
+        use_tip('', true);
+    });
+});
