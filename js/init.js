@@ -4,7 +4,7 @@ let secret_word_id = '';
 let words_count = 0;
 let tmi_client = null;
 let wordQueue = [];
-let win_avatar_enable = true;
+let win_avatar_enable = false;
 
 async function generate_secret_word() {
     const data = await kontekstno_query({ method: 'random-challenge' });
@@ -126,11 +126,9 @@ function loadSettings() {
 
     if (storedAvatarInput) {
         win_avatar_enable = JSON.parse(storedAvatarInput);
+        const avatarInput = document.getElementById('win-avatar-enable');
+        if (avatarInput) avatarInput.checked = win_avatar_enable;
     }
-    
-    const avatarInput = document.getElementById('win-avatar-enable');
-    if (avatarInput) avatarInput.checked = win_avatar_enable;
-
 
     return !!channel_name;
 }
