@@ -204,6 +204,21 @@ section {
     outline: 2px solid green;
 }
 
+#settings .setting select {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background: #333;
+    color: #FFF;
+    font-size: 18px;
+}
+
+#settings .setting select:focus {
+    outline: 2px solid #777;
+}
+
 #leaderboard {
     padding: 20px;
     background-color: #222;

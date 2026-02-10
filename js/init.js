@@ -5,6 +5,7 @@ let words_count = 0;
 let tmi_client = null;
 let wordQueue = [];
 let win_avatar_enable = false;
+let BASE_DOMAIN;
 
 async function generate_secret_word() {
     const data = await kontekstno_query({ method: 'random-challenge' });
@@ -19,7 +20,9 @@ async function kontekstno_query({
     last_word_rank = 0
 } = {}) {
 
-    const BASE_DOMAIN = 'https://xn--80aqu.xn--e1ajbkccewgd.xn--p1ai/';
+    if (!BASE_DOMAIN) {
+        BASE_DOMAIN = 'https://xn--80aqu.xn--e1ajbkccewgd.xn--p1ai/';
+    }
 
     // 1. Создаем объект URL. Он сам склеит домен и метод правильно.
     // Если method пустой, просто будет запрос на корень, можно добавить проверку при желании.
@@ -111,6 +114,12 @@ function loadSettings() {
     const storedChannel = localStorage.getItem('channel_name');
     const storedRestartTime = localStorage.getItem('restart_time');
     const storedAvatarInput = localStorage.getItem('win_avatar_enable');
+    const storedApiSelect = localStorage.getItem('api_select');
+    const apiList = {
+        main: 'https://xn--80aqu.xn--e1ajbkccewgd.xn--p1ai/',
+        proxy: 'https://045111.xyz:8080/',
+        dev: 'http://localhost:3333/'
+    }
 
     if (storedChannel) {
         channel_name = storedChannel;
@@ -130,6 +139,12 @@ function loadSettings() {
         if (avatarInput) avatarInput.checked = win_avatar_enable;
     }
 
+    if (storedApiSelect) {
+        BASE_DOMAIN = apiList[storedApiSelect];
+        const apiSelect = document.getElementById('api-select');
+        if (apiSelect) apiSelect.value = storedApiSelect;
+    }
+
     return !!channel_name;
 }
 
@@ -139,6 +154,7 @@ if (saveBtn) {
         const channelInput = document.getElementById('channel-name');
         const restartInput = document.getElementById('restart-time');
         const avatarInput = document.getElementById('win-avatar-enable');
+        const apiSelect = document.getElementById('api-select');
 
         if (channelInput && channelInput.value) {
             localStorage.setItem('channel_name', channelInput.value.trim());
@@ -150,6 +166,10 @@ if (saveBtn) {
 
         if (avatarInput) {
             localStorage.setItem('win_avatar_enable', avatarInput.checked);
+        }
+
+        if (apiSelect) {
+            localStorage.setItem('api_select', apiSelect.value);
         }
 
         // скрываем блок настроек после сохранения для визуальной индикации успешного сохранения. возможно добавить тост всплавающий? возможно галочку рядом на секунду показывать?
@@ -207,6 +227,7 @@ async function app() {
 const channelInput = document.getElementById("channel-name");
 const restartInput = document.getElementById("restart-time");
 const avatarInput = document.getElementById('win-avatar-enable');
+const apiSelect = document.getElementById("api-select");
 let validationTimeout;
 
 function checkFormsValidity() {
@@ -265,6 +286,10 @@ restartInput.addEventListener("input", () => {
 });
 
 avatarInput.addEventListener("input", () => {
+    checkFormsValidity();
+});
+
+apiSelect.addEventListener("change", () => {
     checkFormsValidity();
 });
 
