@@ -19,7 +19,8 @@ async function kontekstno_query({
     last_word_rank = 0
 } = {}) {
 
-    const BASE_DOMAIN = 'https://xn--80aqu.xn--e1ajbkccewgd.xn--p1ai/';
+    // const BASE_DOMAIN = 'https://xn--80aqu.xn--e1ajbkccewgd.xn--p1ai/';
+    const BASE_DOMAIN = 'https://api.contextno.com/';
 
     // 1. Создаем объект URL. Он сам склеит домен и метод правильно.
     // Если method пустой, просто будет запрос на корень, можно добавить проверку при желании.
