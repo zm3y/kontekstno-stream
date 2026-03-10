@@ -21,7 +21,7 @@ function update_tip_progress() {
     let tip_requests_count = tip_requests_users.size;
 
     if (tip_progress_fill) {
-        let progress = tip_required > 0 ? (tip_requests_count / tip_required) * 100 : 100;
+        let progress = tip_required > 0 ? (tip_requests_count / tip_required) * 100 : 0;
         tip_progress_fill.style.width = Math.min(100, progress) + '%';
     }
     if (tip_count_current) tip_count_current.innerText = tip_requests_count;
@@ -97,7 +97,9 @@ document.addEventListener('DOMContentLoaded', function () {
     tip_menu_button.addEventListener('click', function () {
         use_tip('', true);
     });
-    // Обновляем прогресс при загрузке и периодически (так как uniqUsers меняется в другом файле)
     update_tip_progress();
-    setInterval(update_tip_progress, 2000);
+});
+
+document.addEventListener('uniqueGuessersAmountChanged', () => {
+    update_tip_progress();
 });
