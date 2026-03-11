@@ -167,6 +167,12 @@ function addMatchWord(new_message, distance) {
         }
     }
 
+    if (insertIndex === 0 && newDistance < 150) {
+        const audio = new Audio('audio/slovotron-ding-1.mp3');
+        audio.volume = 0.1;
+        audio.play().catch(e => console.error('Ошибка воспроизведения звука:', e));
+    }
+
     // Вставляем элемент в правильную позицию
     if (insertIndex === children.length) {
         container.appendChild(newMsgElement);
