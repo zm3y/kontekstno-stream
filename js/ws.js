@@ -198,6 +198,7 @@ function message_template(word, distance, name, nickname_color) {
 }
 
 function handle_win(winner_user) {
+
     is_game_finished = true;
     winTime = Date.now();
 
