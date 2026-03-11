@@ -74,7 +74,6 @@ async function process_message(user, nickname_color, word, force_win = false) {
         if (checked_words.get(word).distance) {
             if (!uniqUsers.has(user.username)) {
                 uniqUsers.add(user.username);
-                // if (typeof update_tip_progress === 'function') update_tip_progress();
                 emit('uniqueGuessersAmountChanged');
             }
             repeatWords++

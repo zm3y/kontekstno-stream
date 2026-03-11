@@ -16,16 +16,28 @@ const tip_count_total = document.getElementById('tip-count-total');
 //     console.log('best_found_distance', best_found_distance)
 // }, 5000)
 
+const tip_progress_block = document.getElementById('tip-progress');
+const tip_progress_bar = document.querySelector('#tip-progress .bar');
+const tip_bulb = document.querySelector('#tip-progress .bulb');
+
 function update_tip_progress() {
     let tip_required = Math.floor(uniqUsers.size / 2);
     let tip_requests_count = tip_requests_users.size;
 
-    if (tip_progress_fill) {
-        let progress = tip_required > 0 ? (tip_requests_count / tip_required) * 100 : 0;
-        tip_progress_fill.style.width = Math.min(100, progress) + '%';
+    // Вычисляем прогресс один раз как число 0-100
+    let progress = 0;
+    if (tip_required > 0) {
+        progress = Math.min(100, (tip_requests_count / tip_required) * 100);
+    } else {
+        progress = tip_requests_count > 0 ? 100 : 0;
     }
-    if (tip_count_current) tip_count_current.innerText = tip_requests_count;
-    if (tip_count_total) tip_count_total.innerText = tip_required;
+
+    tip_progress_fill.style.width = progress + '%';
+    tip_bulb.style.filter = `grayscale(${100 - progress}%)`;
+    tip_progress_block.style.display = tip_requests_count > 0 ? 'flex' : 'none';
+
+    tip_count_current.innerText = tip_requests_count;
+    tip_count_total.innerText = tip_required;
 }
 
 async function use_tip(user = '', force = false) {
@@ -51,6 +63,9 @@ async function use_tip(user = '', force = false) {
         return;
     }
 
+    // Play activation animation
+    tip_progress_bar.classList.add('tip-activated');
+
     // надо фейкануть дальность лучшего слова чтобы он не уполовинивал близость, а чуть подальше. Например мальтипликатор 1.5 даст 25% приближения вместо 50%
     let fine_tuned_distance = Math.floor(best_found_distance * 1.5);
 
@@ -68,12 +83,18 @@ async function use_tip(user = '', force = false) {
     });
     if (!tip_word.distance) {
         console.error('tip_word.distance is undefined', tip_word);
+        tip_progress_bar.classList.remove('tip-activated');
         return;
     }
     console.log('tip_word:', tip_word);
     best_found_distance = tip_word.distance; // обновляем текущую лучшую дальность
     console.log('best_found_distance after tip:', best_found_distance);
-    reset_tips();
+
+    // Wait a bit for animation to show before resetting/hiding
+    setTimeout(() => {
+        tip_progress_bar.classList.remove('tip-activated');
+        reset_tips();
+    }, 800);
 
     checked_words.set(tip_word.word, { distance: tip_word.distance });
     const new_message = message_template(tip_word.word, tip_word.distance, '💡 Подсказка', '#DDD');
