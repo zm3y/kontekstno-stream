@@ -253,6 +253,14 @@
     gap: 20px;
 }
 
+#winner .winner-avatar-wrapper {
+    overflow: hidden;
+    border-radius: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 #winner-avatar {
     max-width: 80px;
     border-radius: 300px;
@@ -262,6 +270,10 @@
 
 #winner-avatar.blurred {
     filter: blur(10px);
+}
+
+#winner-avatar img {
+    vertical-align: middle;
 }
 
 #winner .winner-name {
