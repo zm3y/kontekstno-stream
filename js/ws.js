@@ -9,6 +9,7 @@ const best_match_container = document.querySelector('.guessing .best-match');
 const MAX_LAST_WORDS = 20;
 const kontekstno_api_tips_max_distance = 300; // апи подсказок не реагирует на число больше 300
 
+const emit = (name, data) => document.dispatchEvent(new CustomEvent(name, { detail: data }));
 
 function addAnythingToLastWords(html) {
     last_words_container.insertAdjacentHTML('afterbegin', html);
@@ -71,7 +72,10 @@ async function process_message(user, nickname_color, word, force_win = false) {
     // Проверяем, есть ли слово в списке
     if (checked_words.has(word)) {
         if (checked_words.get(word).distance) {
-            if (!uniqUsers.has(user.username)) { uniqUsers.add(user.username) }
+            if (!uniqUsers.has(user.username)) {
+                uniqUsers.add(user.username);
+                emit('uniqueGuessersAmountChanged');
+            }
             repeatWords++
         }
         // добавить слово в колонку .guessing .last-words в верх списка
@@ -120,7 +124,11 @@ async function process_message(user, nickname_color, word, force_win = false) {
         best_found_distance = word_check.distance;
     }
 
-    if (!uniqUsers.has(user.username)) { uniqUsers.add(user.username) }
+    if (!uniqUsers.has(user.username)) {
+        uniqUsers.add(user.username);
+        // if (typeof update_tip_progress === 'function') update_tip_progress();
+        emit('uniqueGuessersAmountChanged');
+    }
     uniqWords++
 
     // готовый html шаблон слова
@@ -159,6 +167,12 @@ function addMatchWord(new_message, distance) {
         }
     }
 
+    if (insertIndex === 0 && newDistance < 150) {
+        const audio = new Audio('audio/slovotron-ding-1.mp3');
+        audio.volume = 0.1;
+        audio.play().catch(e => console.error('Ошибка воспроизведения звука:', e));
+    }
+
     // Вставляем элемент в правильную позицию
     if (insertIndex === children.length) {
         container.appendChild(newMsgElement);
@@ -189,6 +203,7 @@ function message_template(word, distance, name, nickname_color) {
 }
 
 function handle_win(winner_user) {
+
     is_game_finished = true;
     winTime = Date.now();
 

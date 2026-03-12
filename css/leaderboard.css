@@ -52,6 +52,7 @@
     font-weight: bold;
     color: #4CAF50;
     margin-left: 10px;
+    text-wrap: nowrap;
 }
 
 #leaderboard .controls {
