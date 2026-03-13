@@ -165,10 +165,11 @@ async function runQueue() {
 }
 
 function loadSettings() {
-    const storedChannel = localStorage.getItem('channel_name');
-    const storedRestartTime = localStorage.getItem('restart_time');
-    const storedAvatarInput = localStorage.getItem('win_avatar_enable');
-    const storedSoundInput = localStorage.getItem('sound_enable');
+    const urlParams = new URLSearchParams(window.location.search);
+    const storedChannel = urlParams.get('channel_name') || localStorage.getItem('channel_name');
+    const storedRestartTime = urlParams.get('restart_time') || localStorage.getItem('restart_time');
+    const storedAvatarInput = urlParams.get('win_avatar_enable') || localStorage.getItem('win_avatar_enable');
+    const storedSoundInput = urlParams.get('sound_enable') || localStorage.getItem('sound_enable');
 
     if (storedChannel) {
         channel_name = storedChannel;
@@ -183,7 +184,7 @@ function loadSettings() {
     }
 
     if (storedAvatarInput) {
-        win_avatar_enable = JSON.parse(storedAvatarInput);
+        win_avatar_enable = storedAvatarInput === 'true';
         const avatarInput = document.getElementById('win-avatar-enable');
         if (avatarInput) avatarInput.checked = win_avatar_enable;
     }
