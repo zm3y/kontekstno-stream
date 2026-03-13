@@ -190,7 +190,7 @@ function loadSettings() {
     }
 
     if (storedSoundInput) {
-        sound_enable = JSON.parse(storedSoundInput);
+        sound_enable = storedSoundInput === 'true';
         const soundInput = document.getElementById('sound-enable');
         if (soundInput) soundInput.checked = sound_enable;
     }
