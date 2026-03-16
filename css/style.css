@@ -415,3 +415,11 @@ input[type="submit"]:disabled {
     font-size: 5rem;
     margin-bottom: 20px;
 }
+
+/* app theme - obs-overlay */
+body.theme-obs-overlay nav,
+body.theme-obs-overlay #info,
+body.theme-obs-overlay footer.main,
+body.theme-obs-overlay footer.tech-things {
+    display: none;
+}
