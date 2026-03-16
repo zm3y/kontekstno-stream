@@ -170,23 +170,23 @@ function loadSettings() {
     // Подключение внешнего CSS-файла
     let cssFile = urlParams.get('cssFile');
     if (cssFile) {
-        let cssUrl = cssFile;
-        // Если ссылка не начинается с http://, https:// или //
-        if (!cssUrl.startsWith('http://') && !cssUrl.startsWith('https://') && !cssUrl.startsWith('//')) {
-            cssUrl = 'https://' + cssUrl;
-        }
+        try {
+            let urlString = cssFile;
+            // Если ссылка не начинается с http, https или не является протокол-относительной
+            if (!/^(https?:)?\/\//.test(urlString)) {
+                urlString = 'https://' + urlString;
+            }
 
-        const timestamp = new Date().getTime();
-        if (cssUrl.includes('?')) {
-            cssUrl += '&slv_timestamp=' + timestamp;
-        } else {
-            cssUrl += '?slv_timestamp=' + timestamp;
-        }
+            const cssUrl = new URL(urlString);
+            cssUrl.searchParams.set('slv_timestamp', Date.now());
 
-        const linkElement = document.createElement('link');
-        linkElement.rel = 'stylesheet';
-        linkElement.href = cssUrl;
-        document.head.appendChild(linkElement);
+            const linkElement = document.createElement('link');
+            linkElement.rel = 'stylesheet';
+            linkElement.href = cssUrl.href;
+            document.head.appendChild(linkElement);
+        } catch (e) {
+            console.error(`Некорректный URL в параметре cssFile: "${cssFile}"`, e);
+        }
     }
 
     // Обработка темы приложения
