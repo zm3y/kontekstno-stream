@@ -122,14 +122,14 @@ function create_chat_connection(channel_name = '') {
         // const name = user['display-name'];
         // console.log(user['display-name']);
 
-        // если в сообщении больше двух слов, 20 символов, слишком короткое или число, то игнорируем
-        if (message.split(' ').length > 1 || message.length > 20 || message.length <= 1 || !isNaN(message)) return;
-
         // проверка на подсказку, дальше не идем
         if (message.toLowerCase().startsWith('!подска') || message.toLowerCase().startsWith('! подска')) {
             use_tip(user['username']);
             return;
         }
+
+        // если в сообщении больше двух слов, 20 символов, слишком короткое или число, то игнорируем
+        if (message.split(' ').length > 1 || message.length > 20 || message.length <= 1 || !isNaN(message)) return;
 
         // Приводим ЛЕД и ЛЁД к одному виду
         message = message.replace(/ё/gi, 'е');
