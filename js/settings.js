@@ -18,7 +18,7 @@ function loadSettings() {
                 urlString = 'https://' + urlString;
             }
 
-            const cssUrl = new URL(urlString);
+            const cssUrl = new URL(urlString, window.location.href);
             cssUrl.searchParams.set('slv_timestamp', Date.now());
 
             const linkElement = document.createElement('link');
