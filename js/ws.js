@@ -1,7 +1,5 @@
 const last_words_container = document.querySelector('.guessing .last-words');
 const best_match_container = document.querySelector('.guessing .best-match');
-const MAX_LAST_WORDS = 20;
-const kontekstno_api_tips_max_distance = 300; // апи подсказок не реагирует на число больше 300
 
 const emit = (name, data) => document.dispatchEvent(new CustomEvent(name, { detail: data }));
 

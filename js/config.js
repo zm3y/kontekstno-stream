@@ -8,7 +8,9 @@ let sound_enable = true;
 let secret_word_id = '';
 let words_count = 0;
 let is_game_finished = false;
-let best_found_distance = 300; // контекстно API max distance
+const MAX_LAST_WORDS = 20;
+const kontekstno_api_tips_max_distance = 300; // апи подсказок не реагирует на число больше 300
+let best_found_distance = kontekstno_api_tips_max_distance; // контекстно API max distance
 
 // Таймеры и статистика
 let menuTimerId;
