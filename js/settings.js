@@ -45,7 +45,7 @@ function loadSettings() {
         document.body.classList.add('obs-overlay');
     }
 
-    const urlChannel = urlParams.get('channel_name');
+    const urlChannel = urlParams.get('channel_name') || urlParams.get('channel');
     if (urlChannel) {
         localStorage.setItem('channel_name', urlChannel);
     }
