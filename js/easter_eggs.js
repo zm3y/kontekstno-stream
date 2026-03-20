@@ -29,13 +29,14 @@ function check_easter_egg(input) {
         if (celeb) {
             const pics = celeb.img.slice(1);
             const pic = pics[Math.floor(Math.random() * pics.length)];
+            const imgSrcPath = (pic) => pic.startsWith('http') ? pic : `img/${pic}`;
 
             const html = `
             <div class="msg">
                 <div class="msg-content">
                     <div class="iwawwa">
                         <img src="img/${celeb.img[0]}">
-                        <img src="img/${pic}">
+                        <img src="${imgSrcPath}">
                     </div>
                 </div>
             </div>`;
