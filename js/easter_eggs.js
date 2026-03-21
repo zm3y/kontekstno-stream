@@ -13,6 +13,11 @@ const celebrities = [
         id: "yui2d",
         tags: ["yui2d", "yui", "юй", "юи", "юй2д", "юи2д"],
         img: ["yui2d_1.gif", "yui2d_2.avif", "yui2d_3.avif", "yui2d_4.gif", "yui2d_5.png", "yui2d_6.avif"]
+    },
+    {
+        id: "quantum075",
+        tags: ["quantum0", "quantum", "quantum075", "квантум"],
+        img: ["https://bot.quantum0.ru/static/images/stickers/1.webp", "https://bot.quantum0.ru/static/images/stickers/2.webp", "https://bot.quantum0.ru/static/images/stickers/3.webp", "https://bot.quantum0.ru/static/images/stickers/4.webp", "https://bot.quantum0.ru/static/images/stickers/5.webp"]
     }
 ];
 
@@ -24,13 +29,14 @@ function check_easter_egg(input) {
         if (celeb) {
             const pics = celeb.img.slice(1);
             const pic = pics[Math.floor(Math.random() * pics.length)];
+            const getSrc = (path) => path ? (path.startsWith('http') ? path : `img/${path}`) : '';
 
             const html = `
             <div class="msg">
                 <div class="msg-content">
                     <div class="iwawwa">
-                        <img src="img/${celeb.img[0]}">
-                        <img src="img/${pic}">
+                        <img src="${getSrc(celeb.img[0])}">
+                        <img src="${getSrc(pic)}">
                     </div>
                 </div>
             </div>`;
